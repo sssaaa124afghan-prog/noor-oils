@@ -278,7 +278,7 @@ function render(){
     [...cos].sort((a, b) => b[1] - a[1]).map(([c, n]) => `<button class="chip" data-co="${esc(c)}" aria-pressed="${CO === c}" style="--c:${col(c)}"><i></i>${esc(c || 'بدون شركة')} <b class="num">${n.toLocaleString('en-US')}</b></button>`).join('');
   const res = search(); LAST = res.map(x => x.r); const q = $('q').value.trim();
   $('count').textContent = q || CO ? `${res.length.toLocaleString('en-US')} نتيجة` : `${ROWS.length.toLocaleString('en-US')} زيت`;
-  if (!res.length){ L.innerHTML = `<div class="empty"><h2>مفيش زيت بالكود أو الاسم ده</h2><p>جرّب جزء من الكود من غير الحروف (مثلاً 2655307)، أو كلمة واحدة من الاسم${CO ? '، أو شيل فلتر الشركة' : ''}.</p></div>`; return; }
+  if (!res.length){ L.innerHTML = `<div class="empty"><h2>مفيش زيت بالكود أو الاسم ده</h2><p>جرّب جزء من الكود من غير الحروف (مثلاً 1234567)، أو كلمة واحدة من الاسم${CO ? '، أو شيل فلتر الشركة' : ''}.</p></div>`; return; }
   const tc = MODE === 'name' ? '' : cnorm(q), tn = MODE === 'code' ? '' : norm(q);
   const key = CO + '|' + MODE + '|' + !!q; const anim = key !== ANIM; ANIM = key;
   L.innerHTML = `<div class="list${anim ? ' enter' : ''}">` + LAST.slice(0, LIM).map((r, i) => `<div class="row${i === SEL ? ' on' : ''}" data-i="${i}" role="button" tabindex="0" style="--i:${Math.min(i, 14)}">
