@@ -143,6 +143,8 @@ dialog[open]{animation:up .45s var(--spring)}@keyframes up{from{transform:transl
 .phs img{width:100%;height:100%;object-fit:cover}
 .df .two{display:flex;gap:10px}.df .two .btn{flex:1}
 .btn.danger{color:#ff3b30}
+.bnote{font-size:13px;color:var(--label-2);margin:10px 16px 0;line-height:1.6}
+.bklate{color:#ff9500!important;font-weight:600}
 dialog.pv{background:#000;color:#fff}dialog.pv img{display:block;max-width:100%;max-height:72vh;margin:10px auto 0;object-fit:contain}
 dialog.pv .btn.line{background:rgba(255,255,255,.14);color:#fff}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -161,6 +163,8 @@ dialog.pv .btn.line{background:rgba(255,255,255,.14);color:#fff}
 <symbol id="i-cam" viewBox="0 0 24 24"><path d="M4 8h3l1.5-2.5h7L17 8h3v11H4z"/><circle cx="12" cy="13.5" r="3.5"/></symbol>
 <symbol id="i-flask" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3l-5-9V3"/><path d="M7.5 15h9"/></symbol>
 <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></symbol>
+<symbol id="i-bk" viewBox="0 0 24 24"><path d="M7 18.5a4.5 4.5 0 1 1 .9-8.9A6 6 0 0 1 19.5 11a3.8 3.8 0 0 1-1 7.5z"/><path d="M12 12.5v5M9.8 14.7 12 12.5l2.2 2.2"/></symbol>
+<symbol id="i-restore" viewBox="0 0 24 24"><path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1"/><path d="M3.5 4v4.5H8M12 8v4l3 2"/></symbol>
 <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></symbol>
 </defs></svg>
 
@@ -169,6 +173,7 @@ dialog.pv .btn.line{background:rgba(255,255,255,.14);color:#fff}
     <div class="top">
       <span class="mini">مرجع الزيوت</span><span class="sp"></span>
       <span class="meta" id="meta"></span>
+      <button class="btn line" id="bkBtn" aria-label="نسخة احتياطية" title="نسخة احتياطية"><svg class="ic"><use href="#i-bk"/></svg><span>نسخة احتياطية</span></button>
       <button class="btn line hide" id="addS" aria-label="عينة جديدة" title="عينة جديدة"><svg class="ic"><use href="#i-plus"/></svg><span>عينة</span></button>
       <button class="btn line" id="mapBtn" aria-label="ربط أعمدة الملف" title="ربط أعمدة الملف"><svg class="ic"><use href="#i-cols"/></svg><span>الأعمدة</span></button>
       <button class="btn sun" id="impBtn" aria-label="استيراد CSV من دفترة" title="استيراد CSV من دفترة"><svg class="ic"><use href="#i-upload"/></svg><span>استيراد</span></button>
@@ -210,6 +215,11 @@ dialog.pv .btn.line{background:rgba(255,255,255,.14);color:#fff}
     <button class="btn" id="sSave"><svg class="ic"><use href="#i-check"/></svg>احفظ العينة</button>
     <button class="btn ghost danger hide" id="sDel"><svg class="ic"><use href="#i-trash"/></svg>حذف العينة</button></div></dialog>
 <dialog id="pD" class="pv"><img id="pImg" alt=""><div class="df"><button class="btn line" id="pX">رجوع</button><button class="btn ghost danger" id="pDel"><svg class="ic"><use href="#i-trash"/></svg>شيل الصورة</button></div></dialog>
+<dialog id="bD"><div class="dh"><h3>النسخة الاحتياطية</h3><button class="btn ghost icon" id="bX" aria-label="إغلاق"><svg class="ic"><use href="#i-x"/></svg></button></div>
+  <div class="form"><label>آخر نسخة<span id="bLast" style="flex:1;text-align:end;color:var(--label)"></span></label><label>اللي هيتحفظ<span id="bWhat" style="flex:1;text-align:end;color:var(--label)"></span></label></div>
+  <p class="bnote">ملف واحد فيه ملف الزيوت والعينات وصورها. احفظه في «الملفات» أو iCloud Drive أو ابعته لنفسك، وتقدر ترجّعه على أي جهاز. الاسترجاع بيضيف العينات اللي مش موجودة، ومش بيمسح حاجة.</p>
+  <input type="file" id="bIn" accept=".json,application/json" class="hide">
+  <div class="df"><button class="btn" id="bSave"><svg class="ic"><use href="#i-bk"/></svg>احفظ نسخة احتياطية</button><button class="btn line" id="bLoad"><svg class="ic"><use href="#i-restore"/></svg>استرجع من نسخة</button></div></dialog>
 <dialog id="mapD"><div class="dh"><h3>ربط أعمدة ملف دفترة</h3><button class="btn ghost icon" id="mX" aria-label="إغلاق"><svg class="ic"><use href="#i-x"/></svg></button></div>
   <div class="map" id="mapBody"></div><div class="prev" id="prev"></div>
   <div class="df"><button class="btn" id="mSave"><svg class="ic"><use href="#i-check"/></svg>احفظ واعرض</button></div></dialog>
@@ -333,7 +343,7 @@ function render(){
     (LAST.length > LIM ? `<button class="btn line more" id="more">اعرض ${Math.min(150, LAST.length - LIM)} كمان (من ${LAST.length.toLocaleString('en-US')})</button>` : '');
   const m = $('more'); if (m) m.onclick = () => { LIM += 150; render(); };
 }
-function paintMeta(){ const t = META.file ? `${META.file} · ${new Date(META.at).toLocaleDateString('en-GB')}` : 'نور الخليج للعطور'; $('meta').textContent = t; $('meta2').textContent = (ROWS.length ? ROWS.length.toLocaleString('en-US') + ' زيت · ' : '') + t; $('mapBtn').classList.toggle('hide', !RAW); }
+function paintMeta(){ const t = META.file ? `${META.file} · ${new Date(META.at).toLocaleDateString('en-GB')}` : 'نور الخليج للعطور'; $('meta').textContent = t; $('meta2').textContent = (ROWS.length ? ROWS.length.toLocaleString('en-US') + ' زيت · ' : '') + t; $('mapBtn').classList.toggle('hide', !RAW || TAB === 's'); }
 addEventListener('scroll', () => $('head').classList.toggle('scrolled', scrollY > 40), { passive:true });
 
 /* ---------- interactions ---------- */
@@ -458,6 +468,40 @@ $('sSave').onclick = async () => {
 $('sDel').onclick = async () => { if (!SEDIT || !confirm(`حذف العينة ${SEDIT.code} وصورها؟`)) return;
   for (const id of SEDIT.photos) await kv.set('ph:' + id, null); SAMP = SAMP.filter(x => x !== SEDIT); await saveSamp(); $('sD').close(); paintSN(); render(); toast('اتحذفت العينة'); };
 const paintSN = () => { $('sN').textContent = SAMP.length || ''; };
+
+/* ================= backup: one JSON file (oils CSV + mapping + samples + photos as data URLs) ================= */
+const b2d = b => new Promise((ok, no) => { const r = new FileReader(); r.onload = () => ok(r.result); r.onerror = no; r.readAsDataURL(b); });
+const d2b = d => fetch(d).then(r => r.blob());
+async function openBk(){ const t = await kv.get('lastBk'), np = SAMP.reduce((s, x) => s + x.photos.length, 0);
+  const days = t ? Math.floor((Date.now() - t) / 864e5) : null;
+  $('bLast').textContent = t ? new Date(t).toLocaleDateString('en-GB') + (days ? ` (من ${days} يوم)` : ' (النهارده)') : 'لسه ماتعملتش';
+  $('bLast').classList.toggle('bklate', !t || days >= 7);
+  $('bWhat').textContent = `${ROWS.length.toLocaleString('en-US')} زيت · ${SAMP.length} عينة · ${np} صورة`; $('bD').showModal(); }
+$('bkBtn').onclick = openBk; $('bX').onclick = () => $('bD').close();
+$('bSave').onclick = async () => {
+  const B = $('bSave'); B.disabled = true; const old = B.innerHTML; B.textContent = 'بيجهّز النسخة…';
+  try {
+    const photos = {}; for (const s of SAMP) for (const id of s.photos){ const b = await kv.get('ph:' + id); if (b) photos[id] = await b2d(b); }
+    const data = { app:'noor-oils', v:1, at:new Date().toISOString(), raw:RAW, map:MAP, meta:META, samples:SAMP, photos };
+    const d = new Date(), stamp = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    const file = new File([JSON.stringify(data)], `noor-oils-backup-${stamp}.json`, { type:'application/json' });
+    if (navigator.canShare && navigator.canShare({ files:[file] }) && /iP(hone|ad|od)|Android/i.test(navigator.userAgent)) {
+      try { await navigator.share({ files:[file], title:'نسخة مرجع الزيوت' }); } catch (e) { if (e.name === 'AbortError') { B.disabled = false; B.innerHTML = old; return; } throw e; }
+    } else { const u = URL.createObjectURL(file), a = document.createElement('a'); a.href = u; a.download = file.name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(u), 4000); }
+    await kv.set('lastBk', Date.now()); toast('اتعملت النسخة: ' + file.name); $('bD').close();
+  } catch (e) { toast('النسخة ماتعملتش: ' + e.message); }
+  B.disabled = false; B.innerHTML = old; };
+$('bLoad').onclick = () => $('bIn').click();
+$('bIn').onchange = async e => { const f = e.target.files[0]; e.target.value = ''; if (!f) return;
+  let data; try { data = JSON.parse(await f.text()); } catch (x) { toast('الملف ده مش نسخة احتياطية مقروءة'); return; }
+  if (data.app !== 'noor-oils'){ toast('الملف ده مش نسخة من مرجع الزيوت'); return; }
+  const have = new Set(SAMP.map(s => cnorm(s.code))), add = (data.samples || []).filter(s => !have.has(cnorm(s.code)));
+  const takeOils = data.raw && (!RAW || confirm(`النسخة فيها ملف زيوت (${data.meta?.file || 'CSV'} — ${new Date(data.at).toLocaleDateString('en-GB')}). تستبدل بيه ملف الزيوت الحالي؟`));
+  for (const s of add) for (const id of s.photos || []) if (data.photos?.[id]) await kv.set('ph:' + id, await d2b(data.photos[id]));
+  SAMP = [...add, ...SAMP]; await saveSamp(); paintSN();
+  if (takeOils){ RAW = data.raw; MAP = data.map; META = data.meta || {}; await save(); }
+  $('bD').close(); ANIM = ''; render();
+  toast(`اترجع: ${add.length} عينة جديدة${(data.samples || []).length - add.length ? ` (${(data.samples || []).length - add.length} موجودة قبل كده)` : ''}${takeOils ? ' + ملف الزيوت' : ''}`); };
 
 (async () => { SAMP = (await kv.get('samples')) || []; paintSN(); })();
 (async () => { RAW = await kv.get('raw'); MAP = await kv.get('map'); META = (await kv.get('meta')) || {}; if (RAW && MAP) build(); paintMeta(); render(); if (ROWS.length) $('q').focus(); })();
